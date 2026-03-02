@@ -1,0 +1,29 @@
+[0m03:46:04.881835 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002432D661550>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000024329267750>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002432F7C39D0>]}
+
+
+============================== 03:46:04.889189 | 1be87206-e2b8-4c7b-ba23-9cb8cd2e5416 ==============================
+[0m03:46:04.889189 [info ] [MainThread]: Running with dbt=1.11.2
+[0m03:46:04.889689 [debug] [MainThread]: running dbt with arguments {'no_print': 'None', 'invocation_command': 'dbt init ecom_dbt', 'printer_width': '80', 'write_json': 'True', 'profiles_dir': 'C:\\Users\\kaush\\.dbt', 'warn_error': 'None', 'indirect_selection': 'eager', 'fail_fast': 'False', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'partial_parse': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_path': 'logs', 'use_experimental_parser': 'False', 'version_check': 'True', 'introspect': 'True', 'quiet': 'False', 'empty': 'None', 'log_cache_events': 'False', 'debug': 'False', 'log_format': 'default', 'use_colors': 'True', 'cache_selected_only': 'False', 'target_path': 'None'}
+[0m03:46:04.919886 [debug] [MainThread]: Starter project path: C:\Users\kaush\AppData\Local\Programs\Python\Python313\Lib\site-packages\dbt\include\starter_project
+[0m03:46:04.944989 [info ] [MainThread]: 
+Your new dbt project "ecom_dbt" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m03:46:04.945718 [info ] [MainThread]: Setting up your profile.
+[0m03:47:16.704070 [info ] [MainThread]: Profile ecom_dbt written to C:\Users\kaush\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m03:47:16.705106 [debug] [MainThread]: Command `dbt init` succeeded at 03:47:16.705000 after 71.97 seconds
+[0m03:47:16.705349 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002432F863950>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002432F8D2E70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002432CF129C0>]}
+[0m03:47:16.705610 [debug] [MainThread]: Flushing usage events
+[0m03:47:18.642487 [debug] [MainThread]: An error was encountered while trying to flush usage events

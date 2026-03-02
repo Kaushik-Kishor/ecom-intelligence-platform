@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: ecom_warehouse
+    database: ecom_warehouse
+    schema: public
+    tables:
+      - name: silver_orders
+      - name: gold_revenue_by_category
+      - name: gold_sla_by_carrier
+      - name: gold_low_stock_alerts

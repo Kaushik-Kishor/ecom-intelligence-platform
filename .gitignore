@@ -1,0 +1,10 @@
+venv/
+checkpoints/
+storage/
+__pycache__/
+*.pyc
+.env
+ecom_dbt/target/
+ecom_dbt/dbt_packages/
+*.crc
+jars/
