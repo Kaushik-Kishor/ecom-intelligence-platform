@@ -25,9 +25,9 @@ def load_parquet_folder(folder_path):
     dfs = [pd.read_parquet(f) for f in files]
     return pd.concat(dfs, ignore_index=True)
 
-
+# ===========================================================================
 # CREATE SCHEMA
-
+# ===========================================================================
 print("Creating schema...")
 
 with engine.connect() as conn:
@@ -93,8 +93,9 @@ with engine.connect() as conn:
 
 print("Schema created successfully")
 
+# ===========================================================================
 # LOAD DATA
-
+# ===========================================================================
 
 def load_table(parquet_path, table_name, if_exists='replace'):
     print(f"\nLoading {table_name}...")
@@ -135,9 +136,9 @@ load_table(
 
 print("\n All tables loaded successfully!")
 
-
+# ===========================================================================
 # VERIFY
-
+# ===========================================================================
 print("\n=== ROW COUNTS ===")
 with engine.connect() as conn:
     for table in ['gold_revenue_by_category', 'gold_sla_by_carrier', 

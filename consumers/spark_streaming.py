@@ -205,10 +205,10 @@ s3 = (shipments_silver.writeStream
 
 print("Silver layer writers started")
 
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 # GOLD LAYER — business aggregations
 # "Answer business questions directly"
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 
 # Gold 1: Revenue by category per minute
 revenue_by_category = (

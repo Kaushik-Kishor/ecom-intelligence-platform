@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 DB_URL = ""
 engine = create_engine(DB_URL)
 
-# ── Create alerts table if not exists ─────────────────────────────────────
+# Create alerts table if not exists
 with engine.connect() as conn:
     conn.execute(text("""
         CREATE TABLE IF NOT EXISTS anomaly_alerts (
@@ -47,9 +47,9 @@ def save_alert(alert_type, severity, entity_id, metric_name, metric_value, thres
         })
         conn.commit()
 
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 # DETECTOR 1: Payment fraud — users with abnormal order frequency
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 def detect_payment_fraud():
     query = """
         SELECT 
@@ -100,9 +100,9 @@ def detect_payment_fraud():
     
     return alerts_saved
 
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 # DETECTOR 2: Demand spikes — Z-score on category order volume
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 def detect_demand_spikes():
     query = """
         SELECT 
@@ -158,9 +158,9 @@ def detect_demand_spikes():
 
     return alerts_saved
 
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 # DETECTOR 3: Revenue anomalies using Isolation Forest on gold layer
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 def detect_revenue_anomalies():
     query = """
         SELECT 
@@ -213,9 +213,9 @@ def detect_revenue_anomalies():
 
     return alerts_saved
 
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 # MAIN LOOP — runs every 60 seconds
-# ══════════════════════════════════════════════════════════════════════════
+# ===========================================================================
 run_count = 0
 while True:
     run_count += 1
