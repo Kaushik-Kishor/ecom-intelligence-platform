@@ -8,3 +8,9 @@ ecom_dbt/target/
 ecom_dbt/dbt_packages/
 *.crc
 jars/
+logs/
+*.log
+ecom_dbt/logs/
+warehouse/migrate_to_azure.py
+pics/
+*.pbix

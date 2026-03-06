@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, text
 from sklearn.ensemble import IsolationForest
 from datetime import datetime, timedelta
 
-DB_URL = "postgresql://ecom_user:ecom_pass@localhost:5433/ecom_warehouse"
+DB_URL = ""
 engine = create_engine(DB_URL)
 
 # ── Create alerts table if not exists ─────────────────────────────────────
@@ -176,7 +176,7 @@ def detect_revenue_anomalies():
     
     df = pd.read_sql(query, engine)
     if len(df) < 10:
-        return 0
+        return 0        
 
     alerts_saved = 0
 

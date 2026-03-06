@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, text
 from datetime import datetime
 
 # Connection 
-DB_URL = "postgresql://ecom_user:ecom_pass@localhost:5433/ecom_warehouse"
+DB_URL = ""
 engine = create_engine(DB_URL)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
