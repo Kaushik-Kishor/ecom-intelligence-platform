@@ -21,7 +21,7 @@ modeling, and ML-based anomaly detection.
 
 ## Architecture
 
-🔗 **Interactive Architecture Diagram:**  
+🔗 **Architecture Diagram:**  
 https://kaushik-kishor.github.io/ecom-intelligence-platform
 ```
 Python Producers (Faker)
