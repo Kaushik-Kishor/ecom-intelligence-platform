@@ -18,7 +18,11 @@ modeling, and ML-based anomaly detection.
 ## Dashboard
 ![Power BI Dashboard](docs/Dashboard1.png)
 
+
 ## Architecture
+
+🔗 **Interactive Architecture Diagram:**  
+https://kaushik-kishor.github.io/ecom-intelligence-platform
 ```
 Python Producers (Faker)
         ↓
@@ -30,7 +34,11 @@ Medallion Architecture (Bronze → Silver → Gold)
         ↓
 PostgreSQL + dbt (Dimensional Warehouse)
         ↓
-Power BI Dashboard + Anomaly Detection
+Anomaly Detection (Isolation Forest + Z-score)
+        ↓
+Power BI Dashboard
+
+☁️ Azure Infrastructure (Data Lake Gen2 + Azure DB for PostgreSQL)
 ```
 
 ## Tech Stack
