@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time E-Commerce Intelligence Platform</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0e1a;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .title-block {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .title-block h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    color: #e2e8f0;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+  }
+
+  .title-block h1 span {
+    color: #63b3ed;
+  }
+
+  .title-block p {
+    color: #4a5568;
+    font-size: 13px;
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* LAYER ROWS */
+  .layer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+    position: relative;
+  }
+
+  .layer-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .cards-row {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* CARDS */
+  .card {
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 140px;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+  }
+
+  .card-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .card-sub {
+    font-size: 11px;
+    color: #718096;
+    line-height: 1.4;
+  }
+
+  .card-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* GENERATION LAYER */
+  .card.gen {
+    background: linear-gradient(135deg, #1a1f35 0%, #141829 100%);
+    border: 1px solid #2d3a5e;
+    box-shadow: 0 0 20px rgba(99,179,237,0.05);
+  }
+  .card.gen .card-title { color: #63b3ed; }
+  .card.gen .card-tag { background: rgba(99,179,237,0.1); color: #63b3ed; border: 1px solid rgba(99,179,237,0.2); }
+
+  /* KAFKA */
+  .card.kafka {
+    background: linear-gradient(135deg, #1a1f2e 0%, #131826 100%);
+    border: 1px solid #2a3550;
+    min-width: 320px;
+  }
+  .card.kafka .card-title { color: #f6ad55; }
+  .card.kafka .card-tag { background: rgba(246,173,85,0.1); color: #f6ad55; border: 1px solid rgba(246,173,85,0.2); }
+
+  .kafka-topics {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .topic-pill {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(246,173,85,0.08);
+    border: 1px solid rgba(246,173,85,0.15);
+    color: #f6ad55;
+  }
+
+  /* SPARK */
+  .card.spark {
+    background: linear-gradient(135deg, #1a1f2e 0%, #131826 100%);
+    border: 1px solid #2a3550;
+    min-width: 320px;
+  }
+  .card.spark .card-title { color: #fc8181; }
+  .card.spark .card-tag { background: rgba(252,129,129,0.1); color: #fc8181; border: 1px solid rgba(252,129,129,0.2); }
+
+  /* MEDALLION */
+  .card.bronze {
+    background: linear-gradient(135deg, #1e1810 0%, #18140d 100%);
+    border: 1px solid #4a3728;
+  }
+  .card.bronze .card-title { color: #c8874a; }
+  .card.bronze .card-tag { background: rgba(200,135,74,0.1); color: #c8874a; border: 1px solid rgba(200,135,74,0.2); }
+
+  .card.silver {
+    background: linear-gradient(135deg, #161a1f 0%, #111519 100%);
+    border: 1px solid #2a3540;
+  }
+  .card.silver .card-title { color: #a0aec0; }
+  .card.silver .card-tag { background: rgba(160,174,192,0.1); color: #a0aec0; border: 1px solid rgba(160,174,192,0.2); }
+
+  .card.gold {
+    background: linear-gradient(135deg, #1a1a10 0%, #14140d 100%);
+    border: 1px solid #4a4420;
+  }
+  .card.gold .card-title { color: #ecc94b; }
+  .card.gold .card-tag { background: rgba(236,201,75,0.1); color: #ecc94b; border: 1px solid rgba(236,201,75,0.2); }
+
+  /* WAREHOUSE */
+  .card.dbt {
+    background: linear-gradient(135deg, #181422 0%, #120f1a 100%);
+    border: 1px solid #3d2d5e;
+  }
+  .card.dbt .card-title { color: #b794f4; }
+  .card.dbt .card-tag { background: rgba(183,148,244,0.1); color: #b794f4; border: 1px solid rgba(183,148,244,0.2); }
+
+  .card.postgres {
+    background: linear-gradient(135deg, #101c22 0%, #0d1619 100%);
+    border: 1px solid #1e4060;
+  }
+  .card.postgres .card-title { color: #4fd1c5; }
+  .card.postgres .card-tag { background: rgba(79,209,197,0.1); color: #4fd1c5; border: 1px solid rgba(79,209,197,0.2); }
+
+  /* OUTPUT */
+  .card.powerbi {
+    background: linear-gradient(135deg, #1a1810 0%, #14120d 100%);
+    border: 1px solid #4a3e10;
+  }
+  .card.powerbi .card-title { color: #f6e05e; }
+  .card.powerbi .card-tag { background: rgba(246,224,94,0.1); color: #f6e05e; border: 1px solid rgba(246,224,94,0.2); }
+
+  .card.anomaly {
+    background: linear-gradient(135deg, #1a1018 0%, #140d12 100%);
+    border: 1px solid #4a1e3a;
+  }
+  .card.anomaly .card-title { color: #f687b3; }
+  .card.anomaly .card-tag { background: rgba(246,135,179,0.1); color: #f687b3; border: 1px solid rgba(246,135,179,0.2); }
+
+  .card.azure {
+    background: linear-gradient(135deg, #101822 0%, #0d1219 100%);
+    border: 1px solid #1a3a5e;
+  }
+  .card.azure .card-title { color: #63b3ed; }
+  .card.azure .card-tag { background: rgba(99,179,237,0.1); color: #63b3ed; border: 1px solid rgba(99,179,237,0.2); }
+
+  /* ARROWS */
+  .arrow-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 0;
+    position: relative;
+  }
+
+  .arrow-line {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(to bottom, #2d3748, #4a5568);
+    position: relative;
+  }
+
+  .arrow-line::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #4a5568;
+  }
+
+  .arrow-label {
+    font-size: 9px;
+    font-family: 'Space Mono', monospace;
+    color: #4a5568;
+    letter-spacing: 0.1em;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  /* METRICS STRIP */
+  .metrics {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+    padding: 16px 32px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid #1e2535;
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .metric {
+    text-align: center;
+  }
+
+  .metric-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #63b3ed;
+    display: block;
+  }
+
+  .metric-label {
+    font-size: 10px;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+  }
+
+  .metric-sep {
+    width: 1px;
+    background: #1e2535;
+    align-self: stretch;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .layer { animation: fadeSlideIn 0.5s ease both; }
+  .layer:nth-child(1) { animation-delay: 0.1s; }
+  .layer:nth-child(2) { animation-delay: 0.15s; }
+  .layer:nth-child(3) { animation-delay: 0.2s; }
+  .layer:nth-child(4) { animation-delay: 0.25s; }
+  .layer:nth-child(5) { animation-delay: 0.3s; }
+  .layer:nth-child(6) { animation-delay: 0.35s; }
+  .layer:nth-child(7) { animation-delay: 0.4s; }
+  .layer:nth-child(8) { animation-delay: 0.45s; }
+  .layer:nth-child(9) { animation-delay: 0.5s; }
+
+  .pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="title-block">
+  <h1>Real-Time <span>E-Commerce</span> Intelligence Platform</h1>
+  <p>End-to-End Data Engineering Pipeline · Local + Azure</p>
+</div>
+
+<div class="pipeline">
+
+  <!-- GENERATION -->
+  <div class="layer">
+    <span class="layer-label">Ingest</span>
+    <div class="cards-row">
+      <div class="card gen">
+        <span class="card-icon">🛒</span>
+        <div class="card-title">Order Producer</div>
+        <div class="card-sub">Faker · ~1 event/sec</div>
+        <span class="card-tag">orders topic</span>
+      </div>
+      <div class="card gen">
+        <span class="card-icon">📦</span>
+        <div class="card-title">Inventory Producer</div>
+        <div class="card-sub">Stock updates · reorder triggers</div>
+        <span class="card-tag">inventory topic</span>
+      </div>
+      <div class="card gen">
+        <span class="card-icon">🚚</span>
+        <div class="card-title">Shipment Producer</div>
+        <div class="card-sub">SLA breach simulation</div>
+        <span class="card-tag">shipments topic</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-block">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">Python · confluent-kafka</div>
+  </div>
+
+  <!-- KAFKA -->
+  <div class="layer">
+    <span class="layer-label">Stream</span>
+    <div class="cards-row">
+      <div class="card kafka">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">Apache Kafka</div>
+        <div class="card-sub">Distributed message broker · partitioned by order_id</div>
+        <div class="kafka-topics">
+          <span class="topic-pill">orders</span>
+          <span class="topic-pill">inventory</span>
+          <span class="topic-pill">shipments</span>
+        </div>
+        <span class="card-tag">Docker · port 9092</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-block">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">Kafka connector · JAR</div>
+  </div>
+
+  <!-- SPARK -->
+  <div class="layer">
+    <span class="layer-label">Process</span>
+    <div class="cards-row">
+      <div class="card spark">
+        <span class="card-icon">🔥</span>
+        <div class="card-title">Spark Structured Streaming</div>
+        <div class="card-sub">Micro-batch · watermarks · windowed aggregations · &lt;3s latency</div>
+        <span class="card-tag">PySpark 3.5 · local[*]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-block">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">writeStream · parquet</div>
+  </div>
+
+  <!-- MEDALLION -->
+  <div class="layer">
+    <span class="layer-label">Store</span>
+    <div class="cards-row">
+      <div class="card bronze">
+        <span class="card-icon">🥉</span>
+        <div class="card-title">Bronze</div>
+        <div class="card-sub">Raw events · partitioned by date/hour</div>
+        <span class="card-tag">append mode</span>
+      </div>
+      <div class="card silver">
+        <span class="card-icon">🥈</span>
+        <div class="card-title">Silver</div>
+        <div class="card-sub">Cleaned · schema enforced · ~10% filtered</div>
+        <span class="card-tag">data quality</span>
+      </div>
+      <div class="card gold">
+        <span class="card-icon">🥇</span>
+        <div class="card-title">Gold</div>
+        <div class="card-sub">Revenue · SLA · low stock aggregations</div>
+        <span class="card-tag">business layer</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-block">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">load_to_postgres.py · pandas</div>
+  </div>
+
+  <!-- WAREHOUSE -->
+  <div class="layer">
+    <span class="layer-label">Model</span>
+    <div class="cards-row">
+      <div class="card dbt">
+        <span class="card-icon">🔧</span>
+        <div class="card-title">dbt</div>
+        <div class="card-sub">Dimensional models · 11/11 tests passing</div>
+        <span class="card-tag">fact + dims</span>
+      </div>
+      <div class="card postgres">
+        <span class="card-icon">🐘</span>
+        <div class="card-title">PostgreSQL</div>
+        <div class="card-sub">fact_orders · dim_product · dim_user · dim_date</div>
+        <span class="card-tag">Azure DB for PostgreSQL</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-block">
+    <div class="arrow-line"></div>
+    <div class="arrow-label">outputs</div>
+  </div>
+
+  <!-- OUTPUTS -->
+  <div class="layer">
+    <span class="layer-label">Output</span>
+    <div class="cards-row">
+      <div class="card powerbi">
+        <span class="card-icon">📊</span>
+        <div class="card-title">Power BI</div>
+        <div class="card-sub">$4.75M revenue · SLA · segments · 30-day trend</div>
+        <span class="card-tag">Azure connected</span>
+      </div>
+      <div class="card anomaly">
+        <span class="card-icon">🔍</span>
+        <div class="card-title">Anomaly Detection</div>
+        <div class="card-sub">Isolation Forest · Z-score · 6.6–7.3σ spikes</div>
+        <span class="card-tag">scikit-learn</span>
+      </div>
+      <div class="card azure">
+        <span class="card-icon">☁️</span>
+        <div class="card-title">Azure Data Lake</div>
+        <div class="card-sub">Bronze/Silver/Gold parquet on Gen2</div>
+        <span class="card-tag">cloud storage</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric">
+    <span class="metric-val pulse">15K+</span>
+    <span class="metric-label">Events Processed</span>
+  </div>
+  <div class="metric-sep"></div>
+  <div class="metric">
+    <span class="metric-val">&lt;3s</span>
+    <span class="metric-label">Batch Latency</span>
+  </div>
+  <div class="metric-sep"></div>
+  <div class="metric">
+    <span class="metric-val">11/11</span>
+    <span class="metric-label">dbt Tests Pass</span>
+  </div>
+  <div class="metric-sep"></div>
+  <div class="metric">
+    <span class="metric-val">7.3σ</span>
+    <span class="metric-label">Spike Detected</span>
+  </div>
+  <div class="metric-sep"></div>
+  <div class="metric">
+    <span class="metric-val">$4.75M</span>
+    <span class="metric-label">Revenue Tracked</span>
+  </div>
+  <div class="metric-sep"></div>
+  <div class="metric">
+    <span class="metric-val">3</span>
+    <span class="metric-label">Cloud Services</span>
+  </div>
+</div>
+
+</body>
+</html>
+
